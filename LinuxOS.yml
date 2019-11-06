@@ -1,0 +1,13 @@
+-  hosts: linux_hosts
+  gather_facts: no
+  remote_user: user
+  become: yes
+  become_method: sudent
+  become_user: student
+  tasks:
+
+  - name: download osquery
+    shell: "wget https://osquery-packages.s3.amazonaws.com/linux/osquery-2.11.2_1.linux_x86_64.tar.gz -O /osquery.tar.gz"
+
+  - name: extract osquery
+    shell: "tar -xzvf /osquery.tar.gz -C /"
