@@ -1,0 +1,21 @@
+- hosts: win_clients
+  gather_facts: no
+  tasks:
+  
+  - name: Installed Feature
+    win_shell: "Get-WindowsFeature | select Name, Installed | where {$_.Installed -eq 'True'}"
+ 
+  - name: Installed Programs
+    win_shell: "Get-WmiObject -Class WIN32_Product"
+
+  - name: Startup Programs
+    win_shell: "Get-WmiObject -Class Win32_StartupCommand"
+
+  - name: Recent logons
+    win_shell: "echo changme"
+
+  - name: Process View
+    win_shell: "Get-Process"
+
+  - name: Get Connections
+    win_shell: "netstat -bano"
