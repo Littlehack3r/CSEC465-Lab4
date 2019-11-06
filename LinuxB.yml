@@ -1,0 +1,28 @@
+-  hosts: linux_hosts
+  gather_facts: no
+  remote_user: user
+  become: yes
+  become_method: sudent
+  become_user: student
+  tasks:
+
+  - name: get installed server components
+    shell: "systemctl -l --type service --all | grep -v not-found"
+    register: installedcomp
+
+  - name: return value
+    debug: var=installedcomp.stdout_lines
+
+  - name: get installed applications
+    shell: apt list --installed
+    register: installedapps
+
+  - name: return value
+    debug: var=installedapps.stdout_lines
+
+  - name: get software to be run on boot
+    shell: "echo fix this"
+    register: boot
+
+  - name: return value
+    debug: var=boot.stdout_lines
