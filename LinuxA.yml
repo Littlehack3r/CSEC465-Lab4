@@ -1,0 +1,43 @@
+-  hosts: linux_hosts
+  gather_facts: no
+  remote_user: user
+  become: yes
+  become_method: sudent
+  become_user: student
+  tasks:
+
+  - name: download osquery
+    shell: "wget https://osquery-packages.s3.amazonaws.com/linux/osquery-2.11.2_1.linux_x86_64.tar.gz -O /osquery.tar.gz"
+
+  - name: extract osquery
+    shell: "tar -xzvf /osquery.tar.gz -C /"
+ 
+  - name: return the hostname
+    shell: "hostname"
+    register: host
+
+  - name: return value
+    debug: var=host.stdout_lines
+
+  - name: return the version
+    shell: "lsb_release -a"
+    register: version
+
+  - name: return value
+    debug: var=version.stdout_lines
+
+  - name: return IP information
+    shell: "ifconfig"
+    register: ip
+
+  - name: return value
+    debug: var=ip.stdout_lines
+
+  - name: return the users
+    shell: "cat /etc/passwd | cut -f 1 -d :"
+    register: users
+
+  - name: return value
+    debug: var=users.stdout_lines
+
+ 
