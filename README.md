@@ -1,1 +1,6 @@
-Develop an Ansible playbook to...a.Install osquery on a Windows hosti.Ensure that osquery has access to Windows eventsb.Install osquery on a Linux host4.Develop one or twoAnsible playbooksfor each of the following tasks. The first playbook must use native tools (or tools available from Microsoft to download). The second playbook, where possible, should use osquery to pull the same information.a.Querying basic host information including:i.Host nameand Domain (if applicable) infoii.OSand OS Patch leveliii.IP informationiv.List of local usersb.Querying installed softwareincluding:i.Installed server components1.AD, IIS, etc.ii.Querying installed application softwareiii.Querying software to be run on bootc.Query information that may be useful for incident responsei.Recent user logons1.May make your own assumptions about “recent”ii.Running processes1.Include: The process ID, the process name, the user id, the parent process id, and the path to the process’binaryiii.Suspicious (other than 80,443) outbound connections
+=====================================
+Part 0 - OSQuery - DONE
+Part A - Basic host information - Work in Progress
+Part B - Query installed software - Written/Testing
+Part C - Incident response - DONE and Tested
+=====================================
