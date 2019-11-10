@@ -17,15 +17,15 @@
          debug: var=logons.stdout_lines
   
         # don't have user id 
-       - name: Running Processes
+       - name: Windows Running Processes
          win_shell: "Get-CimInstance -Class Win32_Process | Select-Object ProcessId, ProcessName, ParentProcessId, Path"
          register: feat
 
        - name: return value
          debug: var=feat.stdout_lines
     
-       - name: Get Connections
-         win_shell: "netstat -bano"
+       - name: Windows Suspicious Connections
+         win_shell: "netstat | findstr /V 'https' | findstr /V 'http'"
          register: connect
 
        - name: return value
