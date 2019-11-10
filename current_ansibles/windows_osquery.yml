@@ -1,0 +1,29 @@
+# This is a testo yaml file for audit lab 
+
+---  
+- name: Windows osquery
+  hosts: windows
+  gather_facts: no
+  vars:
+    ansible_port: 5985
+    ansible_connection: winrm
+    ansible_user: Administrator@auditlab.rit
+    ansible_password: Password1
+    #ansible_winrm_server_cert_validation: ignore
+    ansible_winrm_transport: ntlm
+
+  tasks:
+      - name: Download OSquery - Windows 
+        win_get_url:
+            url: "https://osquery-packages.s3.amazonaws.com/windows/osquery-2.11.2.msi"
+            dest: "C:\\Windows\\Temp\\osquery.msi"
+
+      - name: Installing
+        win_package:
+            path: "C:\\Windows\\Temp\\osquery.msi"
+
+      - name: OSquery Check 
+        win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe 'select * from logged_in_users;'"
+        register: output
+
+      - debug: var=output.stdout_lines

@@ -1,9 +1,8 @@
--  hosts: linux_hosts
+- hosts: linux
   gather_facts: no
-  remote_user: user
+  remote_user: student
   become: yes
-  become_method: sudent
-  become_user: student
+  become_user: root
   tasks:
 
   - name: get installed server components
