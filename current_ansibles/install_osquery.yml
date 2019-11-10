@@ -27,3 +27,15 @@
         register: output
 
       - debug: var=output.stdout_lines
+
+
+- name: Linux osquery 
+  hosts: linux
+  become_user: root
+
+  tasks:
+      - name: Download OSquery - Linux
+        shell: "wget https://osquery-packages.s3.amazonaws.com/linux/osquery-2.11.2_1.linux_x86_64.tar.gz -O /osquery.tar.gz"
+
+      - name: Extracint OSquery - Linux
+        shell: "tar -xzvf /osquery.tar.gz -C /"

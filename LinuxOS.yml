@@ -1,8 +1,9 @@
--  hosts: linux_hosts
+---
+- hosts: linux
   gather_facts: no
   remote_user: user
   become: yes
-  become_method: sudent
+  become_method: student
   become_user: student
   tasks:
 
