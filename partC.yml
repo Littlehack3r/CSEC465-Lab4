@@ -16,6 +16,7 @@
        - name: return value
          debug: var=logons.stdout_lines
   
+        # don't have user id 
        - name: Running Processes
          win_shell: "Get-CimInstance -Class Win32_Process | Select-Object ProcessId, ProcessName, ParentProcessId, Path"
          register: feat
@@ -42,15 +43,16 @@
     - name: Linux Login Return Value
       debug: var=logs.stdout_lines
       
+      # don't have the path of process
     - name: Linux Running Processes
-      shell: "echo changeme"
+      shell: "ps -o pid,cmd,user,ppid"
       register: runproc
       
     - name: Linux Processes Return Value
       debug: var=runproc.stdout_lines
       
     - name: Linux Suspicious Connections
-      shell: "echo changeme"
+      shell: "netstat -nputw | grep -v '443' | grep -v '80' "  
       register: susp
       
     - name: Linux Connections Return Value
