@@ -10,7 +10,7 @@
     tasks:
   
        - name: Recent Windows Logons
-         win_shell: "echo changme"
+         win_shell: "Get-EventLog System -Source Microsoft-Windows-WinLogon -After (Get-Date).AddDays(-5) -ComputerName $env:computername"
          register: logons
 
        - name: return value
