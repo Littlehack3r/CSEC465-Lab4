@@ -15,7 +15,7 @@
   tasks:
       - name: Download OSquery - Windows 
         win_get_url:
-            url: "https://osquery-packages.s3.amazonaws.com/windows/osquery-2.11.2.msi"
+            url: "https://pkg.osquery.io/windows/osquery-4.0.2.msi"
             dest: "C:\\Windows\\Temp\\osquery.msi"
 
       - name: Installing
@@ -35,7 +35,7 @@
 
   tasks:
       - name: Download OSquery - Linux
-        shell: "wget https://osquery-packages.s3.amazonaws.com/linux/osquery-2.11.2_1.linux_x86_64.tar.gz -O /osquery.tar.gz"
+        shell: "wget https://pkg.osquery.io/linux/osquery-4.0.2_1.linux_x86_64.tar.gz -O /osquery.tar.gz"
 
       - name: Extracint OSquery - Linux
         shell: "tar -xzvf /osquery.tar.gz -C /"

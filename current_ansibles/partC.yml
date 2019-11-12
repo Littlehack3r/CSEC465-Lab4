@@ -10,21 +10,22 @@
     tasks:
   
        - name: Recent Windows Logons
-         win_shell: "echo changme"
+         win_shell: "Get-EventLog System -Source Microsoft-Windows-WinLogon -After (Get-Date).AddDays(-5) -ComputerName $env:computername"
          register: logons
 
        - name: return value
          debug: var=logons.stdout_lines
   
-       - name: Running Processes
+        # don't have user id 
+       - name: Windows Running Processes
          win_shell: "Get-CimInstance -Class Win32_Process | Select-Object ProcessId, ProcessName, ParentProcessId, Path"
          register: feat
 
        - name: return value
          debug: var=feat.stdout_lines
     
-       - name: Get Connections
-         win_shell: "netstat -bano"
+       - name: Windows Suspicious Connections
+         win_shell: "netstat | findstr /V 'https' | findstr /V 'http'"
          register: connect
 
        - name: return value
@@ -42,15 +43,16 @@
     - name: Linux Login Return Value
       debug: var=logs.stdout_lines
       
+      # don't have the path of process
     - name: Linux Running Processes
-      shell: "echo changeme"
+      shell: "ps -o pid,cmd,user,ppid"
       register: runproc
       
     - name: Linux Processes Return Value
       debug: var=runproc.stdout_lines
       
     - name: Linux Suspicious Connections
-      shell: "echo changeme"
+      shell: "netstat -nputw | grep -v '443' | grep -v '80' "  
       register: susp
       
     - name: Linux Connections Return Value
