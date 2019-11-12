@@ -2,8 +2,8 @@
   gather_facts: no
   tasks:
   
-  - name: Installed Feature
-    win_shell: "Get-WindowsFeature | select Name, Installed | where {$_.Installed -eq 'True'}"
+  - name: Server Components
+    win_shell: "Get-Service | select name, displayname"
     register: feat
 
   - name: return value
