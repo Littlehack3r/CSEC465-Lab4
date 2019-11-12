@@ -1,0 +1,59 @@
+---
+- name: Windows things
+  hosts: windows
+  vars:
+    ansible_port: 5985
+    ansible_connection: winrm
+    ansible_user: Administrator@auditlab.rit
+    ansible_password: Password1
+    ansible_winrm_transport: ntlm
+    tasks:
+  
+       - name: Recent Windows Logons
+         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select * from logged_in_users;'"
+         register: logons
+
+       - name: return value
+         debug: var=logons.stdout_lines
+  
+        # don't have user id 
+       - name: Windows Running Processes
+         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select pid,name,uid,parent,path from processes;'"
+         register: feat
+
+       - name: return value
+         debug: var=feat.stdout_lines
+    
+       - name: Windows Suspicious Connections
+         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select * from process_open_sockets where remote_port not in (80,443);'" 
+         register: connect
+
+       - name: return value
+         debug: var=connect.stdout_lines
+    
+- name: Linux things
+  hosts: linux
+  become_user: root
+  tasks:
+    
+    - name: Recent Linux Logons
+      shell: "osqueryi --A logged_in_users"
+      register: logs
+      
+    - name: Linux Login Return Value
+      debug: var=logs.stdout_lines
+      
+      # don't have the path of process
+    - name: Linux Running Processes
+      shell: "osqueryi 'select pid,name,uid,parent,path from processes;'"
+      register: runproc
+      
+    - name: Linux Processes Return Value
+      debug: var=runproc.stdout_lines
+      
+    - name: Linux Suspicious Connections
+      shell: "osqueryi 'select * from process_open_sockets where remote_port not in (80,443);'"  
+      register: susp
+      
+    - name: Linux Connections Return Value
+      debug: var=susp.stdout_lines
