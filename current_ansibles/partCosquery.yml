@@ -10,21 +10,21 @@
   tasks:
   
        - name: Recent Windows Logons
-         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select * from logged_in_users;'"
+         win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe 'select * from logged_in_users;'"
          register: logons
 
        - name: return value
          debug: var=logons.stdout_lines
   
        - name: Windows Running Processes
-         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select pid,name,uid,parent,path from processes;'"
+         win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe 'select pid,name,uid,parent,path from processes;'"
          register: feat
 
        - name: return value
          debug: var=feat.stdout_lines
     
        - name: Windows Suspicious Connections
-         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select * from process_open_sockets where remote_port not in (80,443);'" 
+         win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe 'select * from process_open_sockets where remote_port not in (80,443);'" 
          register: connect
 
        - name: return value
