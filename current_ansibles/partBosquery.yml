@@ -29,3 +29,29 @@
 
        - name: return value
          debug: var=connect.stdout_lines
+         
+- name: Linux things
+  hosts: linux
+  become_user: root
+  tasks:
+
+  - name: get installed server components
+    shell: "osqueryi 'SELECT * FROM processes;'"
+    register: installedcomp
+
+  - name: return value
+    debug: var=installedcomp.stdout_lines
+
+  - name: get installed applications
+    shell: "osqueryi 'select * from deb_packages;'"
+    register: installedapps
+
+  - name: return value
+    debug: var=installedapps.stdout_lines
+
+  - name: get software to be run on boot
+    shell: "osqueryi 'select name, path FROM processes WHERE parent = 1;'"
+    register: boot
+
+  - name: return value
+    debug: var=boot.stdout_lines
