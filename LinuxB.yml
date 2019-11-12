@@ -2,7 +2,6 @@
   hosts: linux
   become_user: root
   tasks:
-  tasks:
 
   - name: get installed server components
     shell: "systemctl -l --type service --all | grep -v not-found"
