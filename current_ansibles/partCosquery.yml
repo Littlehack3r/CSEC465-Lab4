@@ -7,7 +7,7 @@
     ansible_user: Administrator@auditlab.rit
     ansible_password: Password1
     ansible_winrm_transport: ntlm
-    tasks:
+  tasks:
   
        - name: Recent Windows Logons
          win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select * from logged_in_users;'"
