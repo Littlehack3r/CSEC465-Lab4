@@ -1,0 +1,56 @@
+---
+- name: Linux things
+  hosts: linux
+  become_user: root
+  tasks:
+
+  - name: get installed server components
+    shell: "systemctl -l --type service --all | grep -v not-found"
+    register: installedcomp
+
+  - name: return value
+    debug: var=installedcomp.stdout_lines
+
+  - name: get installed applications
+    shell: apt list --installed
+    register: installedapps
+
+  - name: return value
+    debug: var=installedapps.stdout_lines
+
+  - name: get software to be run on boot
+    shell: "systemctl list-unit-files | grep enabled"
+    register: boot
+
+  - name: return value
+    debug: var=boot.stdout_lines
+
+- name: Windows things
+  hosts: windows
+  vars:
+    ansible_port: 5985
+    ansible_connection: winrm
+    ansible_user: Administrator@auditlab.rit
+    ansible_password: Password1
+    ansible_winrm_transport: ntlm
+    tasks:
+        - name: Server Components
+          win_shell: "Get-Service | select name, displayname"
+          register: feat
+
+        - name: return value
+          debug: var=feat.stdout_lines
+ 
+        - name: Installed Programs
+          win_shell: "Get-WmiObject -Class WIN32_Product"
+          register: pro
+  
+        - name: return value
+          debug: var=pro.stdout_lines
+
+        - name: Startup Programs
+          win_shell: "Get-WmiObject -Class Win32_StartupCommand"
+          register: startpro
+
+        - name: return value
+          debug: var=startpro.stdout_lines
