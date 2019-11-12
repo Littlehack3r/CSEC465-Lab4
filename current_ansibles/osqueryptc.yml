@@ -16,7 +16,6 @@
        - name: return value
          debug: var=logons.stdout_lines
   
-        # don't have user id 
        - name: Windows Running Processes
          win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select pid,name,uid,parent,path from processes;'"
          register: feat
@@ -43,7 +42,6 @@
     - name: Linux Login Return Value
       debug: var=logs.stdout_lines
       
-      # don't have the path of process
     - name: Linux Running Processes
       shell: "osqueryi 'select pid,name,uid,parent,path from processes;'"
       register: runproc
