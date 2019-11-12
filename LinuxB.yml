@@ -1,7 +1,5 @@
-- hosts: linux
-  gather_facts: no
-  remote_user: student
-  become: yes
+- name: Linux things
+  hosts: linux
   become_user: root
   tasks:
 
@@ -20,7 +18,7 @@
     debug: var=installedapps.stdout_lines
 
   - name: get software to be run on boot
-    shell: "echo fix this"
+    shell: "systemctl list-unit-files | grep enabled"
     register: boot
 
   - name: return value
