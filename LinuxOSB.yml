@@ -4,7 +4,7 @@
   tasks:
 
   - name: get installed server components
-    shell: "systemctl -l --type service --all | grep -v not-found"
+    shell: "osqueryi 'SELECT * FROM processes;'"
     register: installedcomp
 
   - name: return value
