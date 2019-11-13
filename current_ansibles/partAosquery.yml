@@ -1,0 +1,65 @@
+---
+- name: Windows Host enumeration - osquery
+  hosts: windows
+  vars:
+    ansible_port: 5985
+    ansible_connection: winrm
+    ansible_user: Administrator@auditlab.rit
+    ansible_password: Password1
+    ansible_winrm_transport: ntlm
+
+  tasks:
+    - name: windows Hostname enumeration
+      win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe --json 'select hostname from system_info'"
+      register: hostname
+
+    - name: windows IP enumeration
+      win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe --json 'select friendly_name,address,mask from interface_addresses'"
+      register: ip
+
+    - name: windows user enumeration
+      win_shell: "C:\\ProgramData\\osquery\\osqueryi.exe --json 'select username from users'"
+      register: users
+ 
+
+    - debug:
+        msg:
+          - "==========================================="
+          - "=========== Windows Enumeration ==========="
+          - "===========================================" 
+          - "Hostname and Domain"
+          - "{{ hostname.stdout  }}"
+          - "IP Information"
+          - "{{ ip.stdout  }}"
+          - "User Information"
+          - "{{ users.stdout  }}"
+
+
+
+
+- name: Linux Host enumeration - osquery 
+  hosts: linux
+  tasks:
+    - name: linux hostname enumeration
+      shell: osqueryi --json "select local_hostname from system_info"
+      register: hostname 
+
+    - name: linux ip enumeration
+      shell: osqueryi --json "select friendly_name,address,mask from interface_addresses;"
+      register: ip
+
+    - name: linux user enumeration
+      shell: osqueryi --json "select username from users;"
+      register: users
+
+    - debug:
+        msg:
+          - "==========================================="
+          - "==========  Linux Enumeration ============="
+          - "==========================================="
+          - "Hostname:"
+          - "{{ hostname.stdout  }}"
+          - "IP Information"
+          - "{{ ip.stdout  }}"
+          - "User Information"
+          - "{{ users.stdout  }}"
