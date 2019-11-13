@@ -1,0 +1,89 @@
+---
+- name: Linux Host enumeration 
+  hosts: linux
+  tasks:
+    - name: linux hostname
+      shell: hostname
+      register: hostname 
+
+    - name: linux os version 
+      shell: "head -2 /etc/os-release"
+      register: os
+
+    - name: linux os patch level os version
+      shell: "uname -a"
+      register: ospatch
+
+    - name: linux IP address
+      shell: "ip -br a"
+      register: ip
+
+    - name: linux User Account Information 
+      shell: "cat /etc/passwd"
+      register: userinfo
+
+    - name: Print all linux stuff
+      debug:
+          msg: 
+            - "Hostname: {{ hostname.stdout }}"
+            - "OS: {{ os.stdout  }}"
+            - "Kernel version, patches: {{ ospatch.stdout  }}"
+            - "IP Interfaces: "
+            - "{{ ip.stdout_lines  }}"
+            - "======================================="
+            - "User Information"
+            - "======================================="
+            - "{{ userinfo.stdout_lines  }}"
+
+
+- name: Windows Host enumeration 
+  hosts: windows
+  vars:
+    ansible_port: 5985
+    ansible_connection: winrm
+    ansible_user: Administrator@auditlab.rit
+    ansible_password: Password1
+    ansible_winrm_transport: ntlm
+  tasks:
+    - name: windows Hostname enumeration 
+      win_command: "hostname"
+      register: hostname
+
+    - name: return value
+      debug: var=hostname.stdout_lines
+
+    - name: windows Domain enumeration 
+      win_command: "wmic computersystem get domain"
+      register: domain 
+
+    - name: windows os version
+      win_command: "wmic os get Caption,CSDVersion /value"
+      register: osversion
+
+    - name: windows hotfix
+      win_command: "wmic qfe get installedon,hotfixid,description"
+      register: hotfix
+
+    - name: windows ip information
+      win_command: "wmic nicconfig get description,ipaddress,servicename"
+      register: windowsip
+    
+    - name: windows users
+      win_command: "wmic useraccount get name,SID"
+      register: windowsusers
+
+
+    - name: Windows - Basic information - Native
+      debug:
+        msg: 
+          - "Hostname: {{ hostname.stdout }}"
+          - "Domain: {{ domain.stdout }}"
+          - "OS Version and Hotfixes "
+          - "{{ osversion.stdout_lines  }}"
+          - "{{ hotfix.stdout_lines }}"
+
+          - "IP Information"
+          - "{{windowsip.stdout_lines}}"
+
+          - "User Information"
+          - "{{ windowsusers.stdout_lines }}"
