@@ -2,8 +2,8 @@
   gather_facts: no
   tasks:
   
-  - name: Installed Feature
-    win_shell: "Get-WindowsFeature | select Name, Installed | where {$_.Installed -eq 'True'}"
+  - name: Server Components
+    win_shell: "Get-Service | select name, displayname"
     register: feat
 
   - name: return value
@@ -23,23 +23,4 @@
   - name: return value
     debug: var=startpro.stdout_lines
 
-  - name: Recent logons
-    win_shell: "echo changme"
-    register: logons
-
-  - name: return value
-    debug: var=logons.stdout_lines
-
-  - name: Process View
-    win_shell: "Get-Process"
-    register: process
-
-  - name: return value
-    debug: var=process.stdout_lines
-
-  - name: Get Connections
-    win_shell: "netstat -bano"
-    register: connect
-
-  - name: return value
-    debug: var=connect.stdout_lines
+ 

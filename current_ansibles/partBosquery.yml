@@ -1,0 +1,57 @@
+---
+- name: Windows things
+  hosts: windows
+  vars:
+    ansible_port: 5985
+    ansible_connection: winrm
+    ansible_user: Administrator@auditlab.rit
+    ansible_password: Password1
+    ansible_winrm_transport: ntlm
+    tasks:
+       
+       - name: Windows Installed Server Components
+         win_shell: "C:\\ProgramData\\osquery\\osquery.exe "select name,version,publisher,install_date from programs where name!='';""
+         register: logons
+
+       - name: return value
+         debug: var=logons.stdout_lines
+  
+       - name: Windows Installed Application Software
+         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select display_name,pid,status,path from services;'"
+         register: feat
+
+       - name: return value
+         debug: var=feat.stdout_lines
+    
+       - name: Windows Startup Items
+         win_shell: "C:\\ProgramData\\osquery\\osquery.exe 'select name,path,type,source from startup_items;'" 
+         register: connect
+
+       - name: return value
+         debug: var=connect.stdout_lines
+         
+- name: Linux things
+  hosts: linux
+  become_user: root
+  tasks:
+
+  - name: get installed server components
+    shell: "osqueryi 'SELECT * FROM processes;'"
+    register: installedcomp
+
+  - name: return value
+    debug: var=installedcomp.stdout_lines
+
+  - name: get installed applications
+    shell: "osqueryi 'select * from deb_packages;'"
+    register: installedapps
+
+  - name: return value
+    debug: var=installedapps.stdout_lines
+
+  - name: get software to be run on boot
+    shell: "osqueryi 'select name, path FROM processes WHERE parent = 1;'"
+    register: boot
+
+  - name: return value
+    debug: var=boot.stdout_lines
